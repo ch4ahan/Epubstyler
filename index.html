@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>EPUB 스타일러 — 내 소설을 내 취향으로</title>
+<link rel="stylesheet" href="css/app.css"/>
+<script src="js/vendor/jszip.min.js"></script>
+</head>
+<body>
+<div id="app">
+
+  <!-- ══════════ 시작 화면 (파일 열기) ══════════ -->
+  <section id="dropzone" class="dropzone">
+    <div class="dropzone-inner">
+      <div class="dz-logo">EPUB 스타일러</div>
+      <p class="dz-sub">웹소설 EPUB에 상태창·말풍선·공포 효과를 심어 새 파일로 저장해요.<br/>
+        파일은 <b>내 브라우저 안에서만</b> 처리되고 어디에도 전송되지 않아요.</p>
+      <div class="dz-target" id="dz-target" role="button" tabindex="0" aria-label="EPUB 파일 열기">
+        <div class="dz-icon">📖</div>
+        <div class="dz-text"><b>EPUB 파일을 여기로 끌어다 놓거나</b><br/>눌러서 선택하세요</div>
+      </div>
+      <input type="file" id="file-input" accept=".epub,application/epub+zip" hidden/>
+      <p class="dz-note">원본 파일은 절대 바뀌지 않아요. 항상 <code>파일명_styled.epub</code> 새 파일로 저장돼요.</p>
+      <p class="dz-error" id="dz-error" hidden></p>
+    </div>
+  </section>
+
+  <!-- ══════════ 작업대 ══════════ -->
+  <section id="workbench" class="workbench" hidden>
+
+    <header class="topbar">
+      <button class="tb-btn" id="btn-home" title="다른 파일 열기">←</button>
+      <div class="book-title" id="book-title">책 제목</div>
+      <div class="topbar-spacer"></div>
+      <div class="mode-toggle" role="group" aria-label="선택 방식">
+        <button id="mode-sentence" class="mt-btn active">문장 선택</button>
+        <button id="mode-paragraph" class="mt-btn">문단 선택</button>
+      </div>
+      <button class="tb-btn" id="btn-viewer-settings" title="보기 설정">Aa</button>
+      <button class="tb-btn primary" id="btn-save">EPUB로 저장</button>
+    </header>
+
+    <div class="workbench-body">
+
+      <!-- 목차 레일 -->
+      <nav class="toc-rail" id="toc-rail" aria-label="목차">
+        <div class="toc-head">목차</div>
+        <ol id="toc-list" class="toc-list"></ol>
+      </nav>
+
+      <!-- 뷰어 -->
+      <main class="viewer-wrap">
+        <div class="viewer-notice" id="viewer-notice" hidden></div>
+        <iframe id="viewer" class="viewer" title="책 본문 미리보기"></iframe>
+        <div class="chapter-nav">
+          <button id="btn-prev-ch">← 이전</button>
+          <span id="chapter-pos"></span>
+          <button id="btn-next-ch">다음 →</button>
+        </div>
+        <button id="btn-select-done" class="select-done" hidden>선택한 문장에 효과 주기</button>
+      </main>
+
+      <!-- 우측 패널 -->
+      <aside class="side-panel" id="side-panel">
+        <div class="panel-tabs" role="tablist">
+          <button class="pt-btn active" data-panel="effects">효과</button>
+          <button class="pt-btn" data-panel="applied">적용 내역 <span id="applied-count" class="badge-count"></span></button>
+          <button class="pt-btn" data-panel="fonts">폰트</button>
+        </div>
+
+        <!-- 효과 탭 -->
+        <div class="panel-page" id="panel-effects">
+          <p class="panel-hint" id="effects-hint">본문에서 문장을 드래그하거나 문단을 탭하면 효과를 고를 수 있어요.</p>
+          <div class="genre-tabs" id="genre-tabs"></div>
+          <div class="preset-gallery" id="preset-gallery"></div>
+        </div>
+
+        <!-- 적용 내역 탭 -->
+        <div class="panel-page" id="panel-applied" hidden>
+          <p class="panel-hint">지금까지 적용한 효과예요. 항목을 누르면 그 위치로 이동해요.</p>
+          <div id="applied-list" class="applied-list"></div>
+        </div>
+
+        <!-- 폰트 탭 -->
+        <div class="panel-page" id="panel-fonts" hidden>
+          <p class="panel-hint">이름으로 찾아 추가하면 EPUB 안에 폰트가 함께 담겨요.
+            폰트가 없는 기기에서도 그대로 보여요.</p>
+          <input type="search" id="font-search" class="font-search" placeholder="폰트 이름 검색 (예: 학교안심 우주)"/>
+          <div id="font-catalog" class="font-catalog"></div>
+          <div class="font-upload">
+            <div class="fu-head">파일로 추가</div>
+            <p class="fu-note">ttf / otf / woff / woff2 파일을 올릴 수 있어요.<br/>
+              <b>임베드(파일에 담기)가 허용된 폰트인지 꼭 확인해주세요.</b></p>
+            <input type="file" id="font-file-input" accept=".ttf,.otf,.woff,.woff2"/>
+          </div>
+          <div class="font-added">
+            <div class="fu-head">담긴 폰트 <span id="font-added-count"></span></div>
+            <ul id="font-added-list"></ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ══════════ 미세 조정 시트 ══════════ -->
+  <div class="adjust-sheet" id="adjust-sheet" hidden>
+    <div class="as-head">
+      <span class="as-title" id="adjust-title">효과 조정</span>
+      <span class="as-badge" id="adjust-badge"></span>
+      <button class="as-close" id="adjust-close" title="닫기">✕</button>
+    </div>
+    <div class="as-body" id="adjust-body"></div>
+    <div class="as-foot">
+      <button id="adjust-remove" class="btn danger">효과 제거</button>
+      <button id="adjust-save-preset" class="btn">내 프리셋으로 저장</button>
+      <button id="adjust-done" class="btn primary">완료</button>
+    </div>
+  </div>
+
+  <!-- ══════════ 위젯 변환 미리보기 모달 ══════════ -->
+  <div class="modal-backdrop" id="widget-modal" hidden>
+    <div class="modal widget-modal">
+      <div class="modal-head">
+        <span id="widget-modal-title">이렇게 바뀝니다</span>
+        <button class="as-close" id="widget-modal-close">✕</button>
+      </div>
+      <div class="widget-modal-body">
+        <div class="wm-col">
+          <div class="wm-label">내용 (한 줄에 한 항목, 직접 고칠 수 있어요)</div>
+          <textarea id="widget-source" rows="8" spellcheck="false"></textarea>
+          <div class="wm-label" id="widget-rule-hint"></div>
+          <div id="widget-options" class="wm-options"></div>
+        </div>
+        <div class="wm-col">
+          <div class="wm-label">미리보기</div>
+          <div id="widget-preview" class="wm-preview"></div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn" id="widget-cancel">취소</button>
+        <button class="btn primary" id="widget-apply">이대로 적용</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 저장 요약 모달 ══════════ -->
+  <div class="modal-backdrop" id="save-modal" hidden>
+    <div class="modal save-modal">
+      <div class="modal-head"><span>EPUB로 저장</span><button class="as-close" id="save-modal-close">✕</button></div>
+      <div class="modal-body" id="save-summary"></div>
+      <div class="modal-foot">
+        <button class="btn" id="save-cancel">취소</button>
+        <button class="btn primary" id="save-confirm">저장하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════ 보기 설정 팝오버 ══════════ -->
+  <div class="viewer-settings" id="viewer-settings-pop" hidden>
+    <div class="vs-title">보기 설정 <span class="vs-note">미리보기에만 적용돼요 (EPUB에는 저장 안 됨)</span></div>
+    <div class="vs-row">배경
+      <button data-vbg="light" class="vs-bg active">밝게</button>
+      <button data-vbg="sepia" class="vs-bg">세피아</button>
+      <button data-vbg="dark" class="vs-bg">어둡게</button>
+    </div>
+    <div class="vs-row">글자 크기 <input type="range" id="vs-fontsize" min="80" max="160" value="100" step="5"/> <span id="vs-fontsize-val">100%</span></div>
+  </div>
+
+  <!-- 효과 영역 탭 메뉴 -->
+  <div class="ctx-menu" id="ctx-menu" hidden>
+    <button id="ctx-edit">✏️ 효과 수정</button>
+    <button id="ctx-copy">📋 이 스타일 복사</button>
+    <button id="ctx-remove" class="danger">🗑 효과 제거</button>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
