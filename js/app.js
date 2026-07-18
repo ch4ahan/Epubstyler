@@ -11,7 +11,14 @@ const uid = () => Math.random().toString(36).slice(2, 8);
 const BLOCK_SEL = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, dd, dt, td, th, figcaption, div, section, article';
 const DARK_CARDS = new Set(['sysbox', 'levelup', 'hologram', 'terminal', 'magiccontract', 'bloodbox',
   'vignette', 'neon', 'glitch', 'statwin', 'quest', 'livechat', 'flicker', 'shinytitle',
-  'warnbox', 'battlelog', 'pixelbox', 'tvnoise', 'breaking', 'phonecall']);
+  'warnbox', 'battlelog', 'pixelbox', 'tvnoise', 'breaking', 'phonecall',
+  'stainedglass', 'aurora', 'starlight', 'magiccircle', 'dragonbreath', 'velvet',
+  'awaken', 'ultimate', 'flamebox', 'manaburst',
+  'hud', 'aipanel', 'radar', 'cyber', 'itemget', 'bsod', 'ledboard', 'codeblock', 'countdown',
+  'nightmare', 'abyss', 'asylum', 'cctv', 'fluorescent', 'curse',
+  'chalkboard', 'blackboard', 'chalktext',
+  'skillcard', 'choices', 'lockscreen', 'discord', 'musicplayer', 'videocall', 'subtitle',
+  'fireflies', 'snowfall', 'starrain', 'shadowcrawl', 'matrixrain', 'datastream']);
 
 // 미리보기 전용 CSS (저장되지 않음 — iframe 머리에만 존재)
 const PREVIEW_CSS = `
@@ -30,6 +37,7 @@ const state = {
   selectedBlocks: [],
   active: null,           // {preset, els:[], root, group} 조정 중인 효과
   copyBuffer: null,       // {presetId, options}
+  newCover: null,         // {buffer, mediaType}
   currentCat: 'fantasy',
   licNoticeShown: false,
   legacyFontCss: '',
@@ -71,6 +79,7 @@ async function openFile(file) {
     $('#book-title').textContent = book.title;
     $('#dropzone').hidden = true;
     $('#workbench').hidden = false;
+    await updateCoverUI();
     buildToc();
     buildGenreTabs();
     buildGallery();
@@ -107,6 +116,53 @@ $('#btn-home').addEventListener('click', () => {
   $('#workbench').hidden = true;
   $('#dropzone').hidden = false;
   $('#file-input').value = '';
+});
+
+// ═══════════════ 표지 ═══════════════
+async function updateCoverUI() {
+  state.newCover = null;
+  const img = $('#cover-thumb');
+  if (state.book.cover) {
+    const url = await state.book.resourceUrl(state.book.cover.path, state.book.cover.mediaType);
+    if (url) { img.src = url; img.hidden = false; } else img.hidden = true;
+    $('#btn-cover').textContent = '표지 바꾸기';
+  } else {
+    img.hidden = true;
+    img.removeAttribute('src');
+    $('#btn-cover').textContent = '표지 추가';
+  }
+}
+
+$('#btn-cover').addEventListener('click', () => $('#cover-input').click());
+$('#cover-input').addEventListener('change', async e => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file || !state.book) return;
+  try {
+    const im = new Image();
+    im.src = URL.createObjectURL(file);
+    await im.decode();
+    // 원본 표지와 같은 형식(jpg/png)으로 다시 인코딩해 같은 경로에 덮어쓴다
+    const maxW = 1600;
+    const scale = Math.min(1, maxW / im.naturalWidth);
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.round(im.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(im.naturalHeight * scale));
+    canvas.getContext('2d').drawImage(im, 0, 0, canvas.width, canvas.height);
+    const type = state.book.cover?.mediaType === 'image/png' ? 'image/png' : 'image/jpeg';
+    const blob = await new Promise(r => canvas.toBlob(r, type, 0.9));
+    if (!blob) throw new Error('encode');
+    state.newCover = { buffer: await blob.arrayBuffer(), mediaType: type };
+    const img = $('#cover-thumb');
+    img.src = URL.createObjectURL(blob);
+    img.hidden = false;
+    toast(state.book.cover
+      ? '새 표지를 담았어요. 「EPUB로 저장」하면 표지가 바뀌어요.'
+      : '표지를 추가했어요. 「EPUB로 저장」하면 파일에 담겨요.');
+  } catch (err) {
+    console.error(err);
+    toast('이미지를 읽지 못했어요. jpg나 png 파일로 시도해주세요.');
+  }
 });
 
 // ═══════════════ 목차 ═══════════════
@@ -568,6 +624,12 @@ function defaultOptions(optDefs) {
 
 function setOptionVars(el, preset, opts) {
   for (const d of preset.options || []) {
+    if (d.direct) {
+      const v = opts[d.key];
+      if (v === '' || v == null) el.style.removeProperty(d.direct);
+      else el.style.setProperty(d.direct, String(v));
+      continue;
+    }
     if (!d.cssVar) continue;
     const v = opts[d.key];
     if (v === '' || v == null) { el.style.removeProperty(d.cssVar); continue; }
@@ -1300,6 +1362,11 @@ $('#btn-save').addEventListener('click', () => {
   const li1 = document.createElement('li');
   li1.textContent = `저장 파일: ${state.book.fileName}_styled.epub (원본은 그대로 남아요)`;
   ul.appendChild(li1);
+  if (state.newCover) {
+    const lc = document.createElement('li');
+    lc.textContent = state.book.cover ? '표지 교체 1건' : '새 표지 추가 1건';
+    ul.appendChild(lc);
+  }
   for (const f of usedFonts) {
     const li = document.createElement('li');
     const kb = Math.round(f.files.reduce((a, x) => a + x.buffer.byteLength, 0) / 1024);
@@ -1353,7 +1420,7 @@ $('#save-confirm').addEventListener('click', async () => {
       }
     });
 
-    const blob = await state.book.save({ stylerCss, fonts: usedFonts, esManifest });
+    const blob = await state.book.save({ stylerCss, fonts: usedFonts, esManifest, newCover: state.newCover });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `${state.book.fileName}_styled.epub`;

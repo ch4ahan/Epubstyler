@@ -113,6 +113,8 @@ export class EpubBook {
       book.chapters.push({ path: s.path, title: '', doc: null, hadEffects: false, missing: !raw });
     }
 
+    book.cover = book.#findCover(opf);
+
     await book.#loadToc();
     // 목차 제목을 챕터에 매핑
     const byPath = new Map(book.chapters.map(c => [c.path, c]));
@@ -130,6 +132,27 @@ export class EpubBook {
       ch.hadEffects = txt.includes('data-es=');
     }));
     return book;
+  }
+
+  /** 표지 이미지 찾기: EPUB3 properties → EPUB2 meta[name=cover] → 이름에 cover가 든 이미지 */
+  #findCover(opf) {
+    for (const [id, item] of this.manifest) {
+      if ((item.properties || '').split(/\s+/).includes('cover-image')) {
+        return { id, path: resolvePath(this.opfDir, item.href), mediaType: item.mediaType };
+      }
+    }
+    const meta = Array.from(opf.getElementsByTagName('meta')).find(m => m.getAttribute('name') === 'cover');
+    const cid = meta?.getAttribute('content');
+    const byMeta = cid && this.manifest.get(cid);
+    if (byMeta?.mediaType?.startsWith('image/')) {
+      return { id: cid, path: resolvePath(this.opfDir, byMeta.href), mediaType: byMeta.mediaType };
+    }
+    for (const [id, item] of this.manifest) {
+      if (item.mediaType?.startsWith('image/') && /cover/i.test(item.href)) {
+        return { id, path: resolvePath(this.opfDir, item.href), mediaType: item.mediaType };
+      }
+    }
+    return null;
   }
 
   async #loadToc() {
@@ -203,7 +226,7 @@ export class EpubBook {
    * stylerCss: 전체 효과 CSS, fonts: [{family, files:[{filename, buffer}]}],
    * esManifest: 적용 내역 JSON 객체
    */
-  async save({ stylerCss, fonts, esManifest }) {
+  async save({ stylerCss, fonts, esManifest, newCover }) {
     const out = new JSZip();
     // 규격: mimetype은 무압축·첫 엔트리
     out.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
@@ -239,7 +262,19 @@ export class EpubBook {
       }
     }
 
-    out.file(this.opfPath, this.#patchedOpf(cssPath, fontFiles));
+    // 표지 교체/추가
+    let coverAdd = null;
+    if (newCover) {
+      if (this.cover) {
+        out.file(this.cover.path, newCover.buffer); // 같은 경로 덮어쓰기 → 모든 참조 유지
+      } else {
+        const ext = newCover.mediaType === 'image/png' ? 'png' : 'jpg';
+        coverAdd = { path: this.opfDir + 'images/es-cover.' + ext, mediaType: newCover.mediaType };
+        out.file(coverAdd.path, newCover.buffer);
+      }
+    }
+
+    out.file(this.opfPath, this.#patchedOpf(cssPath, fontFiles, coverAdd));
     out.file('es-manifest.json', JSON.stringify(esManifest, null, 2));
 
     return out.generateAsync({
@@ -298,7 +333,7 @@ export class EpubBook {
     return xml;
   }
 
-  #patchedOpf(cssPath, fontFiles) {
+  #patchedOpf(cssPath, fontFiles, coverAdd) {
     const opf = this.opfDoc;
     const manifestEl = opf.querySelector('manifest');
     const ns = 'http://www.idpf.org/2007/opf';
@@ -321,6 +356,24 @@ export class EpubBook {
       const mt = { woff2: 'font/woff2', woff: 'font/woff', ttf: 'application/vnd.ms-opentype', otf: 'application/vnd.ms-opentype' }[ext] || 'application/octet-stream';
       addItem(p, `es-font-${i}`, mt);
     });
+
+    // 새 표지 등록 (EPUB3 properties + EPUB2 meta 양쪽 모두)
+    if (coverAdd && !existingHrefs.has(coverAdd.path)) {
+      const item = opf.createElementNS(ns, 'item');
+      item.setAttribute('id', 'es-cover');
+      item.setAttribute('href', relPath(this.opfDir, coverAdd.path));
+      item.setAttribute('media-type', coverAdd.mediaType);
+      item.setAttribute('properties', 'cover-image');
+      manifestEl.appendChild(item);
+      const metadataEl = opf.querySelector('metadata');
+      const hasMeta = Array.from(opf.getElementsByTagName('meta')).some(m => m.getAttribute('name') === 'cover');
+      if (metadataEl && !hasMeta) {
+        const m = opf.createElementNS(ns, 'meta');
+        m.setAttribute('name', 'cover');
+        m.setAttribute('content', 'es-cover');
+        metadataEl.appendChild(m);
+      }
+    }
 
     let xml = new XMLSerializer().serializeToString(opf);
     if (!xml.startsWith('<?xml')) xml = '<?xml version="1.0" encoding="utf-8"?>\n' + xml;

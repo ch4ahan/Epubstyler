@@ -45,6 +45,11 @@
 
       <!-- 목차 레일 -->
       <nav class="toc-rail" id="toc-rail" aria-label="목차">
+        <div class="cover-box" id="cover-box">
+          <img id="cover-thumb" alt="책 표지" hidden/>
+          <button id="btn-cover" class="btn cover-btn">표지 바꾸기</button>
+          <input type="file" id="cover-input" accept="image/png,image/jpeg,image/webp" hidden/>
+        </div>
         <div class="toc-head">목차</div>
         <ol id="toc-list" class="toc-list"></ol>
       </nav>

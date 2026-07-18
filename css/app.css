@@ -74,6 +74,10 @@ button:focus-visible, [tabindex]:focus-visible, input:focus-visible, textarea:fo
 .toc-rail { width: 220px; flex: none; border-right: 1px solid var(--line); background: var(--panel);
   overflow-y: auto; }
 .toc-head { padding: 12px 14px 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); }
+.cover-box { padding: 12px 14px 4px; text-align: center; border-bottom: 1px solid var(--line); }
+#cover-thumb { max-width: 100%; max-height: 170px; border-radius: 6px; border: 1px solid var(--line);
+  box-shadow: 0 2px 10px rgba(0,0,0,.18); margin-bottom: 8px; }
+.cover-btn { width: 100%; min-height: 36px; font-size: 12px; margin-bottom: 8px; }
 .toc-list { list-style: none; margin: 0; padding: 0 6px 12px; }
 .toc-list button {
   display: block; width: 100%; text-align: left; padding: 9px 8px; border: 0; background: none;

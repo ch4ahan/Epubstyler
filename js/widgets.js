@@ -2,6 +2,8 @@
 // 모든 위젯은 JS 없이 성립한다(EPUB 뷰어 다수가 JS 미실행).
 // 원문은 data-es-original 에 보관되어 "효과 제거" 시 완전 복원된다.
 
+import { EXTRA_WIDGETS, EXTRA_SAMPLES } from './widgets-extra.js';
+
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;');
@@ -350,3 +352,6 @@ export const widgetSample = {
   email: '보낸사람: 인사팀 <hr@company.co.kr>\n받는사람: 김하늘\n제목: 최종 합격을 축하드립니다\n귀하께서는 최종 전형에 합격하셨습니다.\n첫 출근일은 다음 주 월요일입니다.',
   searchbox: '시청역 실종 사건\n시청역 실종 사건 목격자\n시청역 실종 사건 CCTV\n시청역 괴담',
 };
+
+Object.assign(WIDGETS, EXTRA_WIDGETS);
+Object.assign(widgetSample, EXTRA_SAMPLES);

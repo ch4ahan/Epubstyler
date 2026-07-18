@@ -3,13 +3,21 @@
 // 옵션값은 요소 인라인 style의 CSS 변수(--es-*)로 실리므로
 // 어떤 EPUB 뷰어에서도(JS 없이) 그대로 재현된다.
 
+import { EXTRA_PRESETS, EXTRA_CSS } from './presets-extra.js';
+
 export const CATEGORIES = [
   { id: 'fantasy', name: '로판·판타지' },
+  { id: 'paper', name: '종이·문서' },
+  { id: 'action', name: '액션' },
   { id: 'game', name: '게임·SF' },
   { id: 'horror', name: '공포' },
+  { id: 'mood', name: '감성' },
+  { id: 'school', name: '학교' },
   { id: 'mockup', name: '실물' },
   { id: 'sns', name: 'SNS·메신저' },
+  { id: 'scene', name: '본문 연출' },
   { id: 'text', name: '텍스트' },
+  { id: 'motion', name: '움직임' },
   { id: 'custom', name: '내 프리셋' },
 ];
 
@@ -276,6 +284,17 @@ export const PRESETS = [
     options: [range('fs', '글자 크기', 110, 80, 200, 5, '%'), range('ls', '자간', 0.15, 0, 0.6, 0.05, 'em'),
       color('ink', '글자색', ''), fontOpt()] },
 ];
+
+PRESETS.push(...EXTRA_PRESETS);
+
+// 모든 스타일 효과에서 글자색을 바꿀 수 있게, 글자색 옵션이 없는 프리셋에 자동 추가한다.
+// (direct: CSS 변수가 아니라 인라인 color 속성으로 직접 기록 — 어떤 뷰어에서도 성립)
+for (const p of PRESETS) {
+  if (p.kind === 'widget') continue;
+  if (!(p.options || []).some(o => o.key === 'ink' || o.key === 'inkx')) {
+    p.options.push({ key: 'inkx', label: '글자색', type: 'color', direct: 'color', def: '' });
+  }
+}
 
 export const presetById = id => PRESETS.find(p => p.id === id);
 
@@ -756,7 +775,9 @@ export const BASE_CSS = `/* EPUB 스타일러 (es-styler) — 이 파일은 도�
 .es-se-item::before { content: "⌕ "; color: #c2c7cc; }
 .es-se-item:last-child { border-bottom: 0; }
 
-/* 애니메이션 호환: 축소 동작 선호 시 전부 정지 (정지 상태도 완성 디자인) */
+`
++ EXTRA_CSS +
+`/* 애니메이션 호환: 축소 동작 선호 시 전부 정지 (정지 상태도 완성 디자인) */
 @media (prefers-reduced-motion: reduce) {
   [class*="es-"], [class*="es-"]::before, [class*="es-"]::after { animation: none !important; }
 }
