@@ -1128,6 +1128,16 @@ function liveEl(el) {
 }
 
 // ═══════════════ 폰트 ═══════════════
+/** 선택한 문장/문단에만 해당 폰트를 입힌다 (책 전체 변경 아님) */
+function applyFontToSelection(font) {
+  if (!hasSelection()) {
+    toast('먼저 본문에서 문장을 드래그하거나 문단을 탭한 뒤, 폰트의 「선택에 적용」을 눌러주세요.');
+    return false;
+  }
+  applyPreset(presetById('fontarea'), { font: font.family });
+  return true;
+}
+
 function buildFontCatalog() {
   const wrap = $('#font-catalog');
   const q = $('#font-search').value.trim();
@@ -1143,29 +1153,37 @@ function buildFontCatalog() {
     const name = document.createElement('span');
     name.className = 'fc-name';
     name.textContent = entry.name;
-    const btn = document.createElement('button');
-    const added = state.fonts.some(f => f.name === entry.name);
-    btn.textContent = added ? '담김 ✓' : '추가';
-    btn.disabled = added;
-    btn.addEventListener('click', async () => {
-      btn.disabled = true;
-      btn.textContent = '…';
-      try {
-        const font = await downloadCatalogFont(entry, msg => { btn.textContent = '…'; });
-        state.fonts.push(font);
-        btn.textContent = '담김 ✓';
-        renderFontAddedList();
-        await refreshStylerStyles();
-        injectMainFontPreview(font);
-        toast(`「${font.name}」 폰트를 담았어요. 효과 조정에서 폰트로 고를 수 있어요.`);
-      } catch (e) {
-        console.error(e);
-        btn.disabled = false;
-        btn.textContent = '추가';
-        toast('폰트를 내려받지 못했어요. 인터넷 연결을 확인하고 다시 시도해주세요.');
-      }
-    });
-    row.append(name, btn);
+    const existing = state.fonts.find(f => f.name === entry.name);
+    if (existing) {
+      const btnApply = document.createElement('button');
+      btnApply.textContent = '선택에 적용';
+      btnApply.addEventListener('click', () => applyFontToSelection(existing));
+      row.append(name, btnApply);
+    } else {
+      const btn = document.createElement('button');
+      btn.textContent = '추가';
+      btn.addEventListener('click', async () => {
+        btn.disabled = true;
+        btn.textContent = '…';
+        try {
+          const font = await downloadCatalogFont(entry, msg => { btn.textContent = '…'; });
+          state.fonts.push(font);
+          renderFontAddedList();
+          await refreshStylerStyles();
+          injectMainFontPreview(font);
+          buildFontCatalog();
+          // 선택해 둔 문장이 있으면 바로 그 부분에 입힌다
+          if (hasSelection()) applyFontToSelection(font);
+          else toast(`「${font.name}」 폰트를 담았어요. 본문에서 문장을 선택하고 「선택에 적용」을 누르면 그 부분만 바뀌어요.`);
+        } catch (e) {
+          console.error(e);
+          btn.disabled = false;
+          btn.textContent = '추가';
+          toast('폰트를 내려받지 못했어요. 인터넷 연결을 확인하고 다시 시도해주세요.');
+        }
+      });
+      row.append(name, btn);
+    }
     wrap.appendChild(row);
   }
 }
@@ -1195,7 +1213,9 @@ $('#font-file-input').addEventListener('change', async e => {
     renderFontAddedList();
     await refreshStylerStyles();
     injectMainFontPreview(font);
-    toast(`「${font.name}」 폰트를 담았어요.`);
+    buildFontCatalog();
+    if (hasSelection()) applyFontToSelection(font);
+    else toast(`「${font.name}」 폰트를 담았어요. 본문에서 문장을 선택하고 「선택에 적용」을 누르면 그 부분만 바뀌어요.`);
   } catch (err) {
     toast(err.message || '폰트 파일을 읽지 못했어요.');
   }
@@ -1216,6 +1236,11 @@ function renderFontAddedList() {
     size.className = 'size';
     const kb = Math.round(f.files.reduce((a, x) => a + x.buffer.byteLength, 0) / 1024);
     size.textContent = kb > 1024 ? (kb / 1024).toFixed(1) + 'MB' : kb + 'KB';
+    const apply = document.createElement('button');
+    apply.textContent = '선택에 적용';
+    apply.className = 'btn';
+    apply.style.minHeight = '30px';
+    apply.addEventListener('click', () => applyFontToSelection(f));
     const del = document.createElement('button');
     del.textContent = '빼기';
     del.className = 'btn';
@@ -1226,7 +1251,7 @@ function renderFontAddedList() {
       buildFontCatalog();
       refreshStylerStyles();
     });
-    li.append(name, size, del);
+    li.append(name, size, apply, del);
     ul.appendChild(li);
   }
   if (!state.fonts.length) {
