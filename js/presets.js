@@ -62,6 +62,24 @@ export const PRESETS = [
     sample: '황금빛 운명의 서약',
     options: [color('accent', '금색', '#d4a017'), color('accent2', '하이라이트', '#fff3c4'),
       range('fs', '글자 크기', 120, 80, 220, 5, '%'), ...animOpts(), fontOpt()] },
+  { id: 'divider', cat: 'fantasy', kind: 'block', name: '장면 전환 장식선', motion: false,
+    sample: '그날 밤',
+    options: [color('accent', '장식 색', '#a08a5f'),
+      { key: 'sym', label: '장식 문양', type: 'select', cssVar: '--es-sym', quoted: true, def: '❦',
+        choices: [{ value: '❦', label: '❦ 잎사귀' }, { value: '✦', label: '✦ 별' }, { value: '❈', label: '❈ 눈꽃' }, { value: '⚜', label: '⚜ 백합' }, { value: '✧', label: '✧ 반짝임' }] },
+      range('fs', '글자 크기', 100, 70, 160, 5, '%'), fontOpt()] },
+  { id: 'scroll', cat: 'fantasy', kind: 'block', name: '두루마리 예언서', motion: false,
+    sample: '선택받은 자가 어둠을 걷어내리라',
+    options: [color('bg', '종이색', '#f5ecd4'), color('ink', '글자색', '#4a3b22'),
+      range('pad', '안쪽 여백', 24, 10, 44, 1, 'px'), range('fs', '글자 크기', 100, 70, 150, 5, '%'), fontOpt()] },
+  { id: 'oldbook', cat: 'fantasy', kind: 'block', name: '고서 페이지', motion: false,
+    sample: '…금단의 주문은 다음과 같이 전해진다',
+    options: [color('bg', '종이색', '#efe3c0'), color('ink', '글자색', '#4d3d20'),
+      range('pad', '안쪽 여백', 22, 8, 44, 1, 'px'), range('fs', '글자 크기', 100, 70, 150, 5, '%'), fontOpt()] },
+  { id: 'moonglow', cat: 'fantasy', kind: 'inline', name: '달빛 글로우', motion: false,
+    sample: '달빛이 그녀의 이름을 불렀다',
+    options: [color('ink', '글자색', '#4a6fb3'), color('accent', '글로우 색', '#9db8ff'),
+      range('fs', '글자 크기', 100, 70, 180, 5, '%'), fontOpt()] },
 
   // ── 게임·SF ──
   { id: 'sysbox', cat: 'game', kind: 'block', name: '시스템 상태창', motion: false,
@@ -70,6 +88,10 @@ export const PRESETS = [
       text('title', '헤더 문구', 'SYSTEM'), range('bw', '테두리 굵기', 1, 0, 6, 1, 'px'),
       range('radius', '모서리 둥글기', 8, 0, 24, 1, 'px'), range('pad', '안쪽 여백', 14, 4, 36, 1, 'px'),
       range('fs', '글자 크기', 95, 70, 140, 5, '%'), fontOpt()] },
+  { id: 'statwin', cat: 'game', kind: 'widget', name: '스탯 창', motion: false,
+    sample: 'HP: 42/100', options: [] },
+  { id: 'quest', cat: 'game', kind: 'widget', name: '퀘스트 창', motion: false,
+    sample: '메인 퀘스트 — 잃어버린 검', options: [] },
   { id: 'levelup', cat: 'game', kind: 'block', name: '레벨업 팝업', motion: true,
     sample: 'LEVEL UP!',
     options: [color('accent', '광선색', '#ffd54d'), color('bg', '중심색', '#231a05'), color('ink', '글자색', '#ffe89a'),
@@ -90,6 +112,27 @@ export const PRESETS = [
     sample: 'MIDNIGHT',
     options: [color('accent', '네온색', '#ff4dd8'), range('fs', '글자 크기', 110, 80, 200, 5, '%'),
       ...animOpts(), fontOpt()] },
+  { id: 'dmgpop', cat: 'game', kind: 'inline', name: '데미지 숫자', motion: true,
+    sample: '-9,999',
+    options: [color('accent', '숫자 색', '#ff2d1f'), range('fs', '글자 크기', 150, 90, 300, 10, '%'),
+      ...animOpts(), fontOpt()] },
+  { id: 'warnbox', cat: 'game', kind: 'block', name: '경고 박스', motion: false,
+    sample: '위험 구역에 진입했습니다',
+    options: [color('accent', '경고색', '#f7c600'), color('bg', '배경색', '#1b1b12'), color('ink', '글자색', '#ffe9a8'),
+      text('title', '경고 문구', 'WARNING'), range('pad', '안쪽 여백', 16, 6, 36, 1, 'px'),
+      range('fs', '글자 크기', 100, 70, 150, 5, '%'), fontOpt()] },
+  { id: 'battlelog', cat: 'game', kind: 'block', name: '전투 로그', motion: false,
+    sample: '치명타! 그림자 늑대에게 342의 피해',
+    options: [color('accent', '포인트 색', '#5a7d9c'), range('fs', '글자 크기', 85, 65, 120, 5, '%'),
+      range('pad', '안쪽 여백', 12, 4, 30, 1, 'px')] },
+  { id: 'pixelbox', cat: 'game', kind: 'block', name: '도트 게임 대화창', motion: false,
+    sample: '용사여, 마왕성으로 가라!',
+    options: [color('bg', '배경색', '#10214b'), color('ink', '글자색', '#ffffff'),
+      range('pad', '안쪽 여백', 16, 6, 36, 1, 'px'), range('fs', '글자 크기', 95, 70, 140, 5, '%')] },
+  { id: 'loadingbar', cat: 'game', kind: 'block', name: '로딩 바', motion: false,
+    sample: '각성 진행률…',
+    options: [range('pct', '진행률', 62, 0, 100, 1, '%'), color('accent', '게이지 색', '#3fa9f5'),
+      color('bg', '빈 칸 색', '#e6edf3'), color('ink', '글자색', ''), range('fs', '글자 크기', 95, 70, 130, 5, '%'), fontOpt()] },
 
   // ── 공포 ──
   { id: 'flicker', cat: 'horror', kind: 'inline', name: '깜빡이는 글자', motion: true,
@@ -121,6 +164,25 @@ export const PRESETS = [
     sample: '이게아니야이게아니야',
     options: [range('rot', '기울기 정도', 8, 2, 25, 1, '°'), range('jit', '어긋남 정도', 3, 0, 10, 1, 'px'),
       color('ink', '글자색', ''), fontOpt()] },
+  { id: 'redacted', cat: 'horror', kind: 'inline', name: '검열된 텍스트', motion: false,
+    sample: '그 이름은 ■■■',
+    options: [color('accent', '마커 색', '#111111'),
+      select('ink', '가림 정도', 'transparent', [
+        { value: 'transparent', label: '완전히 가리기' }, { value: 'rgba(255,255,255,0.3)', label: '살짝 비치기' }])] },
+  { id: 'blooddrip', cat: 'horror', kind: 'inline', name: '피 흘러내리는 글자', motion: false,
+    sample: '나가지 마',
+    options: [color('accent', '핏빛', '#8f1414'), range('fs', '글자 크기', 110, 80, 200, 5, '%'), fontOpt()] },
+  { id: 'upsidedown', cat: 'horror', kind: 'inline', name: '거꾸로 뒤집힌 글자', motion: false,
+    sample: '여기는 안전해요',
+    options: [range('fs', '글자 크기', 100, 70, 160, 5, '%'), color('ink', '글자색', ''), fontOpt()] },
+  { id: 'tvnoise', cat: 'horror', kind: 'block', name: 'TV 노이즈 화면', motion: true,
+    sample: '…다음 소식입니다. 실종자는 아직…',
+    options: [range('pad', '안쪽 여백', 18, 6, 40, 1, 'px'), range('fs', '글자 크기', 100, 70, 150, 5, '%'),
+      ...animOpts(), fontOpt()] },
+  { id: 'heartbeat', cat: 'horror', kind: 'inline', name: '심장박동 강조', motion: true,
+    sample: '쿵, 쿵, 쿵',
+    options: [color('accent', '글자색', '#b3122e'), range('fs', '글자 크기', 105, 80, 180, 5, '%'),
+      ...animOpts(), fontOpt()] },
 
   // ── 실물 목업 (구조형 위젯) ──
   { id: 'idcard', cat: 'mockup', kind: 'widget', name: '학생증 / 신분증', motion: false,
@@ -135,6 +197,14 @@ export const PRESETS = [
     sample: '아메리카노 4500', options: [] },
   { id: 'contractdoc', cat: 'mockup', kind: 'widget', name: '계약서 + 도장', motion: false,
     sample: '제1조 갑은 을에게…', options: [] },
+  { id: 'wanted', cat: 'mockup', kind: 'widget', name: '현상수배 포스터', motion: false,
+    sample: 'WANTED — 검은 늑대', options: [] },
+  { id: 'ticket', cat: 'mockup', kind: 'widget', name: '입장권 / 티켓', motion: false,
+    sample: '황실 오페라 하우스', options: [] },
+  { id: 'telegram', cat: 'mockup', kind: 'widget', name: '전보', motion: false,
+    sample: '부친 위독 급히 상경 바람', options: [] },
+  { id: 'diary', cat: 'mockup', kind: 'widget', name: '일기장', motion: false,
+    sample: '오늘도 그 애를 봤다', options: [] },
 
   // ── SNS·메신저 (구조형 위젯) ──
   { id: 'kakao', cat: 'sns', kind: 'widget', name: '카톡 대화', motion: false,
@@ -149,6 +219,16 @@ export const PRESETS = [
     sample: '익게이: ㄹㅇ (+128)', options: [] },
   { id: 'livechat', cat: 'sns', kind: 'widget', name: '라이브 채팅', motion: false,
     sample: '별사탕: 완전 소름', options: [] },
+  { id: 'phonecall', cat: 'sns', kind: 'widget', name: '전화 수신 화면', motion: false,
+    sample: '엄마', options: [] },
+  { id: 'email', cat: 'sns', kind: 'widget', name: '이메일', motion: false,
+    sample: '제목: 합격을 축하드립니다', options: [] },
+  { id: 'searchbox', cat: 'sns', kind: 'widget', name: '검색창', motion: false,
+    sample: '시청역 실종 사건', options: [] },
+  { id: 'breaking', cat: 'sns', kind: 'block', name: '뉴스 속보 배너', motion: false,
+    sample: '수도 전역에 비상계엄 선포',
+    options: [text('label', '배너 문구', '속보'), color('accent', '띠 색', '#d5001c'),
+      color('bg', '배경색', '#101010'), range('fs', '글자 크기', 100, 70, 150, 5, '%'), fontOpt()] },
 
   // ── 텍스트 강조 ──
   { id: 'highlight', cat: 'text', kind: 'inline', name: '형광펜', motion: false,
@@ -180,6 +260,21 @@ export const PRESETS = [
   { id: 'dropcap', cat: 'text', kind: 'block', name: '첫 글자 드롭캡', motion: false,
     sample: '그날 밤, 모든 것이 시작되었다.',
     options: [range('fs', '첫 글자 크기', 300, 180, 500, 10, '%'), color('accent', '첫 글자 색', '#8c2a1e'), fontOpt()] },
+  { id: 'typewriter', cat: 'text', kind: 'inline', name: '타자기 글씨', motion: false,
+    sample: '보고서 제7호. 대외비.',
+    options: [color('ink', '글자색', '#222222'), range('fs', '글자 크기', 100, 70, 150, 5, '%'),
+      range('ls', '자간', 0.06, 0, 0.3, 0.02, 'em')] },
+  { id: 'doodleline', cat: 'text', kind: 'inline', name: '손그림 밑줄', motion: false,
+    sample: '여기가 제일 중요함',
+    options: [color('accent', '밑줄 색', '#ff8b8b'), range('bw', '밑줄 두께', 7, 3, 14, 1, 'px'), fontOpt()] },
+  { id: 'stampmark', cat: 'text', kind: 'inline', name: '도장 워터마크', motion: false,
+    sample: '이 문서는 반드시 소각할 것',
+    options: [text('stamp', '도장 글자', '極秘'), color('accent', '도장 색', '#cc2222'),
+      range('fs', '글자 크기', 100, 70, 150, 5, '%'), fontOpt()] },
+  { id: 'verticaltext', cat: 'text', kind: 'block', name: '세로쓰기 강조', motion: false,
+    sample: '밤의 끝에서',
+    options: [range('fs', '글자 크기', 110, 80, 200, 5, '%'), range('ls', '자간', 0.15, 0, 0.6, 0.05, 'em'),
+      color('ink', '글자색', ''), fontOpt()] },
 ];
 
 export const presetById = id => PRESETS.find(p => p.id === id);
@@ -478,6 +573,188 @@ export const BASE_CSS = `/* EPUB 스타일러 (es-styler) — 이 파일은 도�
 .es-q-obj::before { content: "◇ "; color: #caa64c; }
 .es-q-reward { margin-top: 10px; border-top: 1px dashed rgba(202,166,76,.4); padding-top: 8px; color: #ffdf8e; }
 .es-q-reward::before { content: "보상  "; font-size: .8em; color: #b09b62; letter-spacing: .1em; }
+
+/* ── 로판·판타지 추가 ── */
+.es-divider { display: block; text-align: center; margin: 1.5em 0; color: var(--es-accent, #a08a5f);
+  font-size: var(--es-fs, 100%); font-family: var(--es-font, inherit); letter-spacing: .12em; }
+.es-divider::before { content: var(--es-sym, "❦") "  ─────  "; opacity: .85; }
+.es-divider::after { content: "  ─────  " var(--es-sym, "❦"); opacity: .85; }
+
+.es-scroll { display: block; margin: 1.6em auto; max-width: 32em; padding: 1.5em var(--es-pad, 24px);
+  background: linear-gradient(180deg, #e4d5ab 0%, var(--es-bg, #f5ecd4) 10%, var(--es-bg, #f5ecd4) 90%, #e4d5ab 100%);
+  color: var(--es-ink, #4a3b22); font-family: var(--es-font, Georgia, "Nanum Myeongjo", serif);
+  font-size: var(--es-fs, 100%); border-radius: 8px / 16px; position: relative;
+  box-shadow: 0 5px 14px rgba(80, 60, 20, .28); }
+.es-scroll::before, .es-scroll::after { content: ""; display: block; height: 13px; border-radius: 999px;
+  background: linear-gradient(180deg, #bfa771, #8a744a); box-shadow: inset 0 2px 3px rgba(255,255,255,.45), 0 2px 4px rgba(60,40,10,.3);
+  margin: -1.5em calc(var(--es-pad, 24px) * -1 - 8px) 1.2em; }
+.es-scroll::after { margin: 1.2em calc(var(--es-pad, 24px) * -1 - 8px) -1.5em; }
+
+.es-oldbook { display: block; margin: 1.2em 0; padding: var(--es-pad, 22px);
+  background: radial-gradient(ellipse at 12% 18%, rgba(160,120,50,.2), transparent 42%),
+    radial-gradient(ellipse at 88% 82%, rgba(140,100,40,.24), transparent 46%),
+    radial-gradient(ellipse at 55% 45%, rgba(150,110,45,.1), transparent 52%), var(--es-bg, #efe3c0);
+  color: var(--es-ink, #4d3d20); font-family: var(--es-font, "Nanum Myeongjo", Batang, serif);
+  font-size: var(--es-fs, 100%); border-radius: 2% 5% 3% 6% / 5% 3% 6% 2%;
+  box-shadow: 0 3px 10px rgba(70,50,10,.3), inset 0 0 44px rgba(120,90,30,.2); }
+
+.es-moonglow { color: var(--es-ink, #4a6fb3); font-size: var(--es-fs, 100%); font-family: var(--es-font, inherit);
+  text-shadow: 0 0 7px var(--es-accent, #9db8ff), 0 0 16px var(--es-accent, #9db8ff); }
+
+/* ── 게임·SF 추가 ── */
+.es-dmgpop { display: inline-block; transform: rotate(-6deg); font-weight: 900;
+  color: var(--es-accent, #ff2d1f); font-size: var(--es-fs, 150%); font-family: var(--es-font, inherit);
+  text-shadow: -2px 0 #fff, 2px 0 #fff, 0 -2px #fff, 0 2px #fff, 3px 4px 0 rgba(0,0,0,.25); }
+.es-dmgpop.es-on { animation: es-dmg var(--es-dur, 2s) ease-out infinite; }
+@keyframes es-dmg { 0%, 20%, 100% { transform: rotate(-6deg) scale(1); } 6% { transform: rotate(-6deg) scale(1.28); } 12% { transform: rotate(-6deg) scale(.96); } }
+
+.es-warnbox { display: block; margin: 1.2em 0; padding: var(--es-pad, 16px);
+  background: var(--es-bg, #1b1b12); color: var(--es-ink, #ffe9a8); font-size: var(--es-fs, 100%);
+  font-family: var(--es-font, inherit); border: 6px solid var(--es-accent, #f7c600);
+  border-image: repeating-linear-gradient(45deg, var(--es-accent, #f7c600) 0 12px, #14140d 12px 24px) 6; }
+.es-warnbox::before { content: "⚠ " var(--es-title, "WARNING"); display: block; color: var(--es-accent, #f7c600);
+  font-weight: 800; letter-spacing: .22em; margin-bottom: .55em; font-size: .8em; }
+
+.es-battlelog { display: block; margin: 1.2em 0; padding: var(--es-pad, 12px) calc(var(--es-pad, 12px) + 4px);
+  background: #101418; color: #9fb4c8; font-family: "SF Mono", Consolas, monospace;
+  font-size: var(--es-fs, 85%); border-left: 3px solid var(--es-accent, #5a7d9c); white-space: pre-wrap; }
+.es-battlelog::before { content: "— COMBAT LOG —"; display: block; color: var(--es-accent, #5a7d9c);
+  letter-spacing: .25em; font-size: .75em; margin-bottom: .6em; }
+
+.es-pixelbox { display: block; margin: 1.4em 4px; padding: var(--es-pad, 16px);
+  background: var(--es-bg, #10214b); color: var(--es-ink, #fff);
+  font-family: "Galmuri11", "DungGeunMo", "SF Mono", monospace; font-size: var(--es-fs, 95%);
+  border: 4px solid #fff; border-radius: 2px; line-height: 1.8;
+  box-shadow: 0 0 0 4px var(--es-bg, #10214b), 4px 4px 0 4px rgba(0,0,0,.35); position: relative; }
+.es-pixelbox::after { content: "▼"; position: absolute; right: 12px; bottom: 4px; font-size: .7em; opacity: .8; }
+
+.es-loadingbar { display: block; margin: 1.2em 0; color: var(--es-ink, inherit);
+  font-size: var(--es-fs, 95%); font-family: var(--es-font, inherit); }
+.es-loadingbar::after { content: ""; display: block; height: 12px; margin-top: 7px; border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--es-accent, #3fa9f5) 55%, #999);
+  background: linear-gradient(90deg, var(--es-accent, #3fa9f5) 0 var(--es-pct, 62%), var(--es-bg, #e6edf3) var(--es-pct, 62%)); }
+
+/* ── 공포 추가 ── */
+.es-redacted { background: var(--es-accent, #111); color: var(--es-ink, transparent);
+  border-radius: 2px; padding: 0 .18em; text-shadow: none; }
+.es-blooddrip { color: var(--es-accent, #8f1414); font-weight: bold; font-size: var(--es-fs, 110%);
+  font-family: var(--es-font, inherit);
+  text-shadow: 0 2px 2px color-mix(in srgb, var(--es-accent, #8f1414) 55%, transparent),
+    0 9px 7px color-mix(in srgb, var(--es-accent, #8f1414) 38%, transparent),
+    0 16px 12px color-mix(in srgb, var(--es-accent, #8f1414) 22%, transparent); }
+.es-upsidedown { display: inline-block; transform: rotate(180deg); font-size: var(--es-fs, 100%);
+  color: var(--es-ink, inherit); font-family: var(--es-font, inherit); }
+.es-tvnoise { display: block; margin: 1.2em 0; padding: var(--es-pad, 18px); color: #e8e8e8;
+  font-size: var(--es-fs, 100%); font-family: var(--es-font, inherit);
+  text-shadow: 1px 0 rgba(255, 0, 60, .55), -1px 0 rgba(0, 200, 255, .55);
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,.07) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(90deg, #23252a 0 2px, #2d3037 2px 4px);
+  border-radius: 10px; box-shadow: inset 0 0 46px #000; }
+.es-tvnoise.es-on { animation: es-holo-flicker calc(var(--es-dur, 2s) * 1.7) steps(1) infinite; }
+.es-heartbeat { display: inline-block; color: var(--es-accent, #b3122e); font-weight: bold;
+  font-size: var(--es-fs, 105%); font-family: var(--es-font, inherit); }
+.es-heartbeat.es-on { animation: es-heart var(--es-dur, 2s) ease-in-out infinite; }
+@keyframes es-heart { 0%, 28%, 100% { transform: scale(1); } 6% { transform: scale(1.15); } 12% { transform: scale(1); } 18% { transform: scale(1.1); } }
+
+/* ── 뉴스 속보 배너 ── */
+.es-breaking { display: block; margin: 1.2em 0; background: var(--es-bg, #101010); color: #fff;
+  font-weight: 700; font-size: var(--es-fs, 100%); font-family: var(--es-font, inherit);
+  padding: .55em .8em; border-left: 6px solid var(--es-accent, #d5001c); }
+.es-breaking::before { content: var(--es-label, "속보"); display: inline-block;
+  background: var(--es-accent, #d5001c); color: #fff; font-size: .72em; padding: .18em .6em;
+  margin-right: .6em; border-radius: 3px; letter-spacing: .18em; vertical-align: middle; }
+
+/* ── 텍스트 강조 추가 ── */
+.es-typewriter { font-family: "Courier New", Courier, "Nanum Gothic Coding", monospace;
+  letter-spacing: var(--es-ls, .06em); color: var(--es-ink, #222); font-size: var(--es-fs, 100%);
+  text-shadow: .4px .3px 0 rgba(0, 0, 0, .38); }
+.es-doodleline { padding-bottom: .12em;
+  background-image: linear-gradient(97deg, transparent 1%, color-mix(in srgb, var(--es-accent, #ff8b8b) 75%, transparent) 3% 95%, transparent 97%),
+    linear-gradient(94deg, transparent 3%, var(--es-accent, #ff8b8b) 6% 97%, transparent 99%);
+  background-size: 100% calc(var(--es-bw, 7px) * .7), 100% var(--es-bw, 7px);
+  background-position: 0 98%, 0 92%; background-repeat: no-repeat; font-family: var(--es-font, inherit); }
+.es-stampmark { position: relative; display: inline-block; font-size: var(--es-fs, 100%); font-family: var(--es-font, inherit); }
+.es-stampmark::after { content: var(--es-stamp, "極秘"); position: absolute; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) rotate(-14deg); border: 3px double var(--es-accent, #c22);
+  color: var(--es-accent, #c22); border-radius: 8px; padding: .05em .35em; font-weight: 900;
+  opacity: .4; font-size: 1.25em; white-space: nowrap; }
+.es-verticaltext { display: block; width: max-content; max-width: 90%; margin: 1.4em auto;
+  writing-mode: vertical-rl; text-orientation: mixed; min-height: 7em; max-height: 22em;
+  font-size: var(--es-fs, 110%); letter-spacing: var(--es-ls, .15em);
+  color: var(--es-ink, inherit); font-family: var(--es-font, inherit); }
+
+/* ── 실물 위젯 추가 ── */
+.es-w-wanted { background: #efe0b8; border: 3px double #5b4a26; padding: 18px 16px; text-align: center;
+  color: #453718; font-family: "Nanum Myeongjo", Georgia, serif; max-width: 22em; margin: 1.2em auto;
+  box-shadow: 0 4px 12px rgba(70,50,10,.25); }
+.es-wa-head { font-size: 1.7em; font-weight: 900; letter-spacing: .3em; border-bottom: 2px solid #5b4a26;
+  padding-bottom: 6px; margin-bottom: 10px; }
+.es-wa-photo { width: 9em; height: 7em; margin: 0 auto 10px; background: #d9c795; border: 1px solid #a8935e;
+  line-height: 7em; color: #8a7748; font-size: .8em; }
+.es-wa-name { font-size: 1.15em; font-weight: 800; margin-bottom: 6px; }
+.es-wa-desc { font-size: .82em; line-height: 1.6; }
+.es-wa-reward { margin-top: 10px; border-top: 1px dashed #8a7748; padding-top: 8px; font-weight: 800;
+  letter-spacing: .1em; font-size: .95em; }
+
+.es-w-ticket { display: flex; max-width: 26em; margin: 1.2em auto; background: #fffdf4;
+  border: 1px solid #d9cba0; border-radius: 10px; overflow: hidden; color: #4c421f;
+  box-shadow: 0 3px 10px rgba(80,60,20,.18); }
+.es-tk-main { flex: 1; padding: 14px 16px; }
+.es-tk-title { font-weight: 800; font-size: 1.05em; margin-bottom: 6px; }
+.es-tk-rows { font-size: .8em; line-height: 1.6; color: #6f6338; }
+.es-tk-meta { margin-top: 8px; font-size: .75em; letter-spacing: .06em; color: #8a7b48;
+  border-top: 1px solid #e7dcb8; padding-top: 6px; }
+.es-tk-stub { flex: none; width: 3em; display: flex; align-items: center; justify-content: center;
+  writing-mode: vertical-rl; letter-spacing: .35em; font-size: .7em; font-weight: 800; color: #8a7b48;
+  border-left: 2px dashed #c9ba8c; background: #f7f0d8; }
+
+.es-w-telegram { background: #f4efdf; border: 1px solid #c9c0a3; max-width: 26em; margin: 1.2em auto;
+  color: #33301f; font-family: "SF Mono", Consolas, monospace; }
+.es-tg-head { text-align: center; letter-spacing: .5em; font-weight: 800; padding: 8px;
+  border-bottom: 2px solid #33301f; font-size: .9em; }
+.es-tg-meta { font-size: .68em; padding: 6px 12px; border-bottom: 1px dashed #a89f7f; color: #6c6547; }
+.es-tg-body { padding: 14px 12px 16px; letter-spacing: .3em; line-height: 2; font-size: .9em; word-break: keep-all; }
+
+.es-w-diary { background: repeating-linear-gradient(180deg, #fffef8 0 1.9em, #e6dccb 1.9em calc(1.9em + 1px)),
+  linear-gradient(90deg, transparent 2.2em, rgba(214,120,120,.5) 2.2em, rgba(214,120,120,.5) calc(2.2em + 1px), transparent calc(2.2em + 1px));
+  background-blend-mode: multiply; border: 1px solid #e0d6c2; padding: 1.9em 1.2em 1.4em 2.8em;
+  color: #443c30; font-family: var(--es-font, "Nanum Pen Script", cursive, sans-serif);
+  line-height: 1.9; white-space: pre-wrap; box-shadow: 0 3px 10px rgba(80,70,40,.14); }
+.es-d-head { font-weight: 700; border-bottom: 2px solid rgba(214,120,120,.4); display: inline-block;
+  margin-bottom: .4em; }
+
+/* ── SNS·디지털 위젯 추가 ── */
+.es-w-phone { background: linear-gradient(180deg, #17181d, #23252e); border-radius: 22px; max-width: 17em;
+  margin: 1.2em auto; padding: 26px 18px 22px; text-align: center; color: #f2f2f5;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35); }
+.es-p-status { font-size: .72em; color: #9a9aa5; letter-spacing: .12em; margin-bottom: 14px; }
+.es-p-ava { width: 64px; height: 64px; border-radius: 50%; background: #3c3f4c; margin: 0 auto 10px;
+  line-height: 64px; font-size: 1.3em; }
+.es-p-name { font-size: 1.25em; font-weight: 700; }
+.es-p-sub { font-size: .78em; color: #9a9aa5; margin-top: 3px; min-height: 1em; }
+.es-p-btns { display: flex; justify-content: space-between; margin-top: 22px; padding: 0 10px; }
+.es-p-btns span { width: 52px; height: 52px; border-radius: 50%; line-height: 52px; font-size: 1.1em; color: #fff; }
+.es-p-btns .dec { background: #e5484d; }
+.es-p-btns .acc { background: #30c04f; }
+
+.es-w-email { background: #fff; border: 1px solid #dde1e6; border-radius: 8px; color: #1c2128;
+  max-width: 30em; margin: 1.2em auto; overflow: hidden; }
+.es-e-subject { padding: 12px 14px; font-weight: 800; font-size: 1em; border-bottom: 1px solid #eceff2; }
+.es-e-meta { padding: 5px 14px; font-size: .76em; color: #5c6570; }
+.es-e-meta b { display: inline-block; width: 4.6em; color: #8a929b; font-weight: 600; }
+.es-e-body { padding: 12px 14px 16px; font-size: .88em; line-height: 1.7; border-top: 1px solid #eceff2;
+  margin-top: 4px; white-space: pre-wrap; }
+
+.es-w-search { max-width: 26em; margin: 1.2em auto; color: #202124;
+  font-family: -apple-system, "Pretendard", "Noto Sans KR", sans-serif; }
+.es-se-box { background: #fff; border: 1px solid #dfe1e5; border-radius: 999px; padding: .6em 1.1em;
+  font-size: .92em; box-shadow: 0 2px 6px rgba(32,33,36,.14); }
+.es-se-box::before { content: "⌕ "; color: #9aa0a6; font-weight: 700; }
+.es-se-list { background: #fff; border: 1px solid #dfe1e5; border-top: 0; border-radius: 14px;
+  margin: 6px 8px 0; overflow: hidden; }
+.es-se-item { padding: .5em 1.1em; font-size: .82em; color: #3c4043; border-bottom: 1px solid #f1f3f4; }
+.es-se-item::before { content: "⌕ "; color: #c2c7cc; }
+.es-se-item:last-child { border-bottom: 0; }
 
 /* 애니메이션 호환: 축소 동작 선호 시 전부 정지 (정지 상태도 완성 디자인) */
 @media (prefers-reduced-motion: reduce) {

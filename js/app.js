@@ -10,7 +10,8 @@ const uid = () => Math.random().toString(36).slice(2, 8);
 
 const BLOCK_SEL = 'p, h1, h2, h3, h4, h5, h6, li, blockquote, pre, dd, dt, td, th, figcaption, div, section, article';
 const DARK_CARDS = new Set(['sysbox', 'levelup', 'hologram', 'terminal', 'magiccontract', 'bloodbox',
-  'vignette', 'neon', 'glitch', 'statwin', 'quest', 'livechat', 'flicker', 'shinytitle']);
+  'vignette', 'neon', 'glitch', 'statwin', 'quest', 'livechat', 'flicker', 'shinytitle',
+  'warnbox', 'battlelog', 'pixelbox', 'tvnoise', 'breaking', 'phonecall']);
 
 // 미리보기 전용 CSS (저장되지 않음 — iframe 머리에만 존재)
 const PREVIEW_CSS = `

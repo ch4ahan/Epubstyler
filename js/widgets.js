@@ -222,6 +222,95 @@ export const WIDGETS = {
       return `<div class="es-w-comments"><div class="es-c-head">${esc(o.title || '댓글')} <span style="color:#888;font-weight:400">[${items.length}]</span></div>${rows}</div>`;
     },
   },
+  wanted: {
+    rule: '첫 줄이 수배자 이름, 나머지 줄이 설명(죄목·인상착의)이 돼요.',
+    options: [wtext('head', '상단 문구', 'WANTED'), wtext('reward', '현상금', '금화 500닢'), wtext('photo', '그림 자리 문구', '인상착의')],
+    render(src, o) {
+      const ls = lines(src);
+      const name = ls.shift() || '';
+      return `<div class="es-w-wanted"><div class="es-wa-head">${esc(o.head || 'WANTED')}</div>`
+        + `<div class="es-wa-photo">${esc(o.photo || '인상착의')}</div>`
+        + `<div class="es-wa-name">${esc(name)}</div>`
+        + (ls.length ? `<div class="es-wa-desc">${ls.map(esc).join('<br/>')}</div>` : '')
+        + (o.reward ? `<div class="es-wa-reward">현상금 ${esc(o.reward)}</div>` : '') + `</div>`;
+    },
+  },
+  ticket: {
+    rule: '첫 줄이 공연/행사 이름, 나머지 줄은 안내 문구가 돼요. 날짜·좌석은 아래 칸에 적어요.',
+    options: [wtext('date', '날짜', '3월 14일 오후 7시'), wtext('seat', '좌석', 'R석 2열 7번'), wtext('stub', '절취선 문구', 'ADMIT ONE')],
+    render(src, o) {
+      const ls = lines(src);
+      const title = ls.shift() || '';
+      const meta = [o.date, o.seat].filter(Boolean).join(' · ');
+      return `<div class="es-w-ticket"><div class="es-tk-main"><div class="es-tk-title">${esc(title)}</div>`
+        + (ls.length ? `<div class="es-tk-rows">${ls.map(esc).join('<br/>')}</div>` : '')
+        + (meta ? `<div class="es-tk-meta">${esc(meta)}</div>` : '') + `</div>`
+        + `<div class="es-tk-stub">${esc(o.stub || 'ADMIT ONE')}</div></div>`;
+    },
+  },
+  telegram: {
+    rule: '선택한 글 전체가 전보 본문이 돼요. 발신/수신/날짜는 아래 칸에 적어요.',
+    options: [wtext('from', '발신', ''), wtext('to', '수신', ''), wtext('date', '날짜', '')],
+    render(src, o) {
+      const meta = [o.from && `발신 ${o.from}`, o.to && `수신 ${o.to}`, o.date].filter(Boolean).join(' · ');
+      return `<div class="es-w-telegram"><div class="es-tg-head">電報 TELEGRAM</div>`
+        + (meta ? `<div class="es-tg-meta">${esc(meta)}</div>` : '')
+        + `<div class="es-tg-body">${esc(src)}</div></div>`;
+    },
+  },
+  diary: {
+    rule: '선택한 글 전체가 일기 내용이 돼요. 날짜와 날씨는 아래 칸에 적어요.',
+    options: [wtext('date', '날짜', '4월 16일'), wtext('weather', '날씨', '흐림'), wfont()],
+    render(src, o) {
+      const head = [o.date, o.weather && `날씨: ${o.weather}`].filter(Boolean).join('  ');
+      return `<div class="es-w-diary">${head ? `<div class="es-d-head">${esc(head)}</div>\n` : ''}${esc(src)}</div>`;
+    },
+  },
+  phonecall: {
+    rule: '첫 줄이 발신자 이름, 둘째 줄은 전화번호나 부가 설명이 돼요.',
+    options: [wtext('status', '상단 문구', '수신 전화')],
+    render(src, o) {
+      const ls = lines(src);
+      const name = ls.shift() || '알 수 없음';
+      return `<div class="es-w-phone"><div class="es-p-status">${esc(o.status || '수신 전화')}</div>`
+        + `<div class="es-p-ava">${esc(name.slice(0, 1))}</div>`
+        + `<div class="es-p-name">${esc(name)}</div>`
+        + `<div class="es-p-sub">${esc(ls.join(' '))}</div>`
+        + `<div class="es-p-btns"><span class="dec">✕</span><span class="acc">✓</span></div></div>`;
+    },
+  },
+  email: {
+    rule: '「보낸사람: …」「받는사람: …」「제목: …」 줄은 머리말로 들어가고, 나머지가 본문이 돼요.',
+    options: [],
+    render(src) {
+      let from = '', to = '', subject = '';
+      const body = [];
+      for (const l of lines(src)) {
+        const m = /^(보낸\s*사람|받는\s*사람|제목|from|to)\s*[:：]\s*(.+)$/i.exec(l);
+        if (m) {
+          const k = m[1].replace(/\s+/g, '').toLowerCase();
+          if (k === '보낸사람' || k === 'from') from = m[2];
+          else if (k === '받는사람' || k === 'to') to = m[2];
+          else subject = m[2];
+        } else body.push(l);
+      }
+      return `<div class="es-w-email"><div class="es-e-subject">${esc(subject || '(제목 없음)')}</div>`
+        + (from ? `<div class="es-e-meta"><b>보낸사람</b>${esc(from)}</div>` : '')
+        + (to ? `<div class="es-e-meta"><b>받는사람</b>${esc(to)}</div>` : '')
+        + `<div class="es-e-body">${esc(body.join('\n'))}</div></div>`;
+    },
+  },
+  searchbox: {
+    rule: '첫 줄이 검색어, 나머지 줄이 연관 검색어(자동완성)로 붙어요.',
+    options: [],
+    render(src) {
+      const ls = lines(src);
+      const q = ls.shift() || '';
+      return `<div class="es-w-search"><div class="es-se-box">${esc(q)}</div>`
+        + (ls.length ? `<div class="es-se-list">${ls.map(l => `<div class="es-se-item">${esc(l)}</div>`).join('')}</div>` : '')
+        + `</div>`;
+    },
+  },
   livechat: {
     rule: '「닉네임: 내용」 형식으로 한 줄씩. 닉네임마다 다른 색이 자동으로 입혀져요.',
     options: [],
@@ -253,4 +342,11 @@ export const widgetSample = {
   tweet: '목격자A @witness_00\n방금 시청역에서 이상한 거 봤는데 나만 본 거 아니지?\n사진 있는 사람 DM 좀',
   comments: '익게이1: 이거 실화냐 (+128)\nㄴ 익게이2: ㄹㅇ 소름돋음\n익게이3: 주작같은데 (+42)',
   livechat: '별사탕: 아 이 부분 진짜 무서움\n달빛토끼: 뒤에 뭐 지나가지 않았음?\n야광별: 님들 그거 봤어요??',
+  wanted: '검은 늑대\n제국 국고 절도 및 방화\n키 6척, 왼뺨에 흉터',
+  ticket: '황실 오페라 하우스\n개막 30분 전까지 입장\n음식물 반입 금지',
+  telegram: '부친 위독 급히 상경 바람',
+  diary: '오늘도 그 애를 봤다.\n말을 걸까 하다가 그만뒀다.\n내일은 꼭.',
+  phonecall: '엄마\n010-1234-5678',
+  email: '보낸사람: 인사팀 <hr@company.co.kr>\n받는사람: 김하늘\n제목: 최종 합격을 축하드립니다\n귀하께서는 최종 전형에 합격하셨습니다.\n첫 출근일은 다음 주 월요일입니다.',
+  searchbox: '시청역 실종 사건\n시청역 실종 사건 목격자\n시청역 실종 사건 CCTV\n시청역 괴담',
 };
