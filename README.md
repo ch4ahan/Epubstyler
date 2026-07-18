@@ -40,7 +40,7 @@ npx serve .
 
 ## 폰트
 
-내장 카탈로그는 **학교안심 글꼴 전체 65종**(교육부·KERIS 배포, SIL Open Font License)입니다.
+내장 카탈로그는 **학교안심 글꼴 전체 63종**(교육부·KERIS 배포, SIL Open Font License)입니다.
 woff2 파일은 [fonts-archive](https://github.com/fonts-archive)의 jsDelivr CDN에서 내려받아
 EPUB의 `fonts/` 폴더에 임베드하고 `@font-face`로 연결합니다 — 폰트가 설치되지 않은 기기에서도 표시됩니다.
 ttf/otf/woff/woff2 파일 업로드로 다른 폰트도 담을 수 있습니다 (임베드 허용 라이선스인지 확인 필요).
