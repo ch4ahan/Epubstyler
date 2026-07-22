@@ -106,14 +106,14 @@ export const EXTRA_PRESETS = [
   B('pressedflower', 'mood', '꽃압화 편지', '책갈피 속 마른 꽃처럼', [color('bg', '종이색', '#fbf7ec'), pad(24), fs(), fontOpt()]),
 
   // ═══ 학교·칠판 ═══
-  B('chalkboard', 'school', '초록 칠판', '오늘의 목표: 살아남기', [color('bg', '칠판 색', '#2e5641'), pad(22), fs(), fontOpt()]),
-  B('blackboard', 'school', '검은 칠판', '수업 중 떠들지 말 것', [pad(22), fs(), fontOpt()]),
-  I('chalktext', 'school', '분필 글씨', '방과후 옥상으로', [color('ink', '분필 색', '#f2f0e4'), fs(105), fontOpt()]),
-  B('noticepin', 'school', '교실 공지', '가정통신문: 내일은 단축수업입니다', [color('bg', '종이색', '#fffef2'), color('accent', '압정 색', '#d5462e'), pad(20), fs(95), fontOpt()]),
-  B('whiteboard', 'school', '화이트보드', '회의 안건: 축제 예산', [color('accent', '마커 색', '#2456c4'), pad(22), fs(), fontOpt()]),
-  B('timetable', 'school', '시간표', '1교시 국어 · 2교시 마법학', [color('accent', '칸 선 색', '#9db8d0'), pad(16), fs(92), fontOpt()]),
-  B('examsheet', 'school', '시험지', '다음 중 옳은 것을 고르시오.', [text('title', '시험 제목', '2026학년도 1학기 중간고사'), pad(20), fs(92)]),
-  B('wrongnote', 'school', '오답노트', '또 틀렸다. 다시는 안 틀린다.', [color('accent', '빨간펜 색', '#d5462e'), pad(20), fs(95), fontOpt()]),
+  B('chalkboard', 'paper', '초록 칠판', '오늘의 목표: 살아남기', [color('bg', '칠판 색', '#2e5641'), pad(22), fs(), fontOpt()]),
+  B('blackboard', 'paper', '검은 칠판', '수업 중 떠들지 말 것', [pad(22), fs(), fontOpt()]),
+  I('chalktext', 'paper', '분필 글씨', '방과후 옥상으로', [color('ink', '분필 색', '#f2f0e4'), fs(105), fontOpt()]),
+  B('noticepin', 'paper', '교실 공지', '가정통신문: 내일은 단축수업입니다', [color('bg', '종이색', '#fffef2'), color('accent', '압정 색', '#d5462e'), pad(20), fs(95), fontOpt()]),
+  B('whiteboard', 'paper', '화이트보드', '회의 안건: 축제 예산', [color('accent', '마커 색', '#2456c4'), pad(22), fs(), fontOpt()]),
+  B('timetable', 'paper', '시간표', '1교시 국어 · 2교시 마법학', [color('accent', '칸 선 색', '#9db8d0'), pad(16), fs(92), fontOpt()]),
+  B('examsheet', 'paper', '시험지', '다음 중 옳은 것을 고르시오.', [text('title', '시험 제목', '2026학년도 1학기 중간고사'), pad(20), fs(92)]),
+  B('wrongnote', 'paper', '오답노트', '또 틀렸다. 다시는 안 틀린다.', [color('accent', '빨간펜 색', '#d5462e'), pad(20), fs(95), fontOpt()]),
 
   // ═══ 실물 ═══
   B('tornnote', 'mockup', '찢은 메모지', '먼저 가 있을게.\n찾지 마.', [color('bg', '종이색', '#fdfaef'), pad(20), fs(), fontOpt()]),

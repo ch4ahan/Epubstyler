@@ -65,11 +65,11 @@ export const EXTRA_PRESETS2 = [
   B('coffeestain', 'mood', '커피 얼룩 메모', '식은 커피 옆에 남긴 한 줄', [color('bg', '종이색', '#f6efe2'), pad(22), fs(), fontOpt()]),
 
   // ═══ 학교 ═══
-  B('award', 'school', '상장', '위 학생은 성적이 우수하여…', [color('accent', '금테 색', '#c9a83f'), text('title', '상장 제목', '표 창 장'), pad(24), fs(), fontOpt()]),
-  B('mealplan', 'school', '급식표', '오늘의 급식: 제육볶음, 미역국', [color('accent', '칸 색', '#7fb87f'), pad(16), fs(92), fontOpt()]),
-  B('attendance', 'school', '출석부', '3번 김하늘 ○ / 4번 이서준 ×', [color('accent', '선 색', '#b09060'), pad(16), fs(92)]),
-  B('omr', 'school', 'OMR 카드', '1번 정답을 마킹하시오', [color('accent', '마킹 색', '#333'), pad(18), fs(92)]),
-  B('lockernote', 'school', '사물함 쪽지', '방과후 옥상에서 기다릴게', [color('bg', '쪽지 색', '#fdf6e3'), pad(18), fs(), fontOpt()]),
+  B('award', 'paper', '상장', '위 학생은 성적이 우수하여…', [color('accent', '금테 색', '#c9a83f'), text('title', '상장 제목', '표 창 장'), pad(24), fs(), fontOpt()]),
+  B('mealplan', 'paper', '급식표', '오늘의 급식: 제육볶음, 미역국', [color('accent', '칸 색', '#7fb87f'), pad(16), fs(92), fontOpt()]),
+  B('attendance', 'paper', '출석부', '3번 김하늘 ○ / 4번 이서준 ×', [color('accent', '선 색', '#b09060'), pad(16), fs(92)]),
+  B('omr', 'paper', 'OMR 카드', '1번 정답을 마킹하시오', [color('accent', '마킹 색', '#333'), pad(18), fs(92)]),
+  B('lockernote', 'paper', '사물함 쪽지', '방과후 옥상에서 기다릴게', [color('bg', '쪽지 색', '#fdf6e3'), pad(18), fs(), fontOpt()]),
 
   // ═══ 실물 ═══
   W('boardingpass', 'mockup', '보딩패스', 'KIM HANEUL · GATE 17'),

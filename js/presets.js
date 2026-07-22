@@ -13,7 +13,6 @@ export const CATEGORIES = [
   { id: 'game', name: '게임·SF' },
   { id: 'horror', name: '공포' },
   { id: 'mood', name: '감성' },
-  { id: 'school', name: '학교' },
   { id: 'mockup', name: '실물' },
   { id: 'sns', name: 'SNS·메신저' },
   { id: 'scene', name: '본문 연출' },
