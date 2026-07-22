@@ -4,6 +4,7 @@
 // 어떤 EPUB 뷰어에서도(JS 없이) 그대로 재현된다.
 
 import { EXTRA_PRESETS, EXTRA_CSS } from './presets-extra.js';
+import { EXTRA_PRESETS2, EXTRA_CSS2 } from './presets-extra2.js';
 
 export const CATEGORIES = [
   { id: 'fantasy', name: '로판·판타지' },
@@ -285,7 +286,7 @@ export const PRESETS = [
       color('ink', '글자색', ''), fontOpt()] },
 ];
 
-PRESETS.push(...EXTRA_PRESETS);
+PRESETS.push(...EXTRA_PRESETS, ...EXTRA_PRESETS2);
 
 // 모든 스타일 효과에서 글자색을 바꿀 수 있게, 글자색 옵션이 없는 프리셋에 자동 추가한다.
 // (direct: CSS 변수가 아니라 인라인 color 속성으로 직접 기록 — 어떤 뷰어에서도 성립)
@@ -776,7 +777,7 @@ export const BASE_CSS = `/* EPUB 스타일러 (es-styler) — 이 파일은 도�
 .es-se-item:last-child { border-bottom: 0; }
 
 `
-+ EXTRA_CSS +
++ EXTRA_CSS + EXTRA_CSS2 +
 `/* 애니메이션 호환: 축소 동작 선호 시 전부 정지 (정지 상태도 완성 디자인) */
 @media (prefers-reduced-motion: reduce) {
   [class*="es-"], [class*="es-"]::before, [class*="es-"]::after { animation: none !important; }

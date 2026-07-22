@@ -3,6 +3,7 @@
 // 원문은 data-es-original 에 보관되어 "효과 제거" 시 완전 복원된다.
 
 import { EXTRA_WIDGETS, EXTRA_SAMPLES } from './widgets-extra.js';
+import { EXTRA_WIDGETS2, EXTRA_SAMPLES2 } from './widgets-extra2.js';
 
 const esc = s => String(s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -353,5 +354,5 @@ export const widgetSample = {
   searchbox: '시청역 실종 사건\n시청역 실종 사건 목격자\n시청역 실종 사건 CCTV\n시청역 괴담',
 };
 
-Object.assign(WIDGETS, EXTRA_WIDGETS);
-Object.assign(widgetSample, EXTRA_SAMPLES);
+Object.assign(WIDGETS, EXTRA_WIDGETS, EXTRA_WIDGETS2);
+Object.assign(widgetSample, EXTRA_SAMPLES, EXTRA_SAMPLES2);

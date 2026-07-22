@@ -18,7 +18,11 @@ const DARK_CARDS = new Set(['sysbox', 'levelup', 'hologram', 'terminal', 'magicc
   'nightmare', 'abyss', 'asylum', 'cctv', 'fluorescent', 'curse',
   'chalkboard', 'blackboard', 'chalktext',
   'skillcard', 'choices', 'lockscreen', 'discord', 'musicplayer', 'videocall', 'subtitle',
-  'fireflies', 'snowfall', 'starrain', 'shadowcrawl', 'matrixrain', 'datastream']);
+  'fireflies', 'snowfall', 'starrain', 'shadowcrawl', 'matrixrain', 'datastream',
+  'candlelight', 'forbiddenlib', 'achievement', 'gacha', 'radiolog', 'savepoint', 'bufbar',
+  'exitsign', 'time444', 'talisman', 'policeline', 'radiostory', 'xmascard', 'nightsea',
+  'filmstrip', 'smartwatch', 'ranking', 'bubblemsg', 'delivery',
+  'a-rainfall', 'a-ekg', 'a-lightning']);
 
 // 미리보기 전용 CSS (저장되지 않음 — iframe 머리에만 존재)
 const PREVIEW_CSS = `
